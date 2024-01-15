@@ -1,9 +1,10 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 import database as db
 
 # se crea la instancia de Flask
 app = Flask(__name__)
-
+CORS(app)
 #Rutas de la app
 @app.route('/users',methods=['GET'])
 def get_users():
@@ -43,9 +44,12 @@ def get_userByID(id):
 
 @app.route('/user',methods = ['POST'])
 def addUser():
-    username = request.form['username']
-    name = request.form['name']
-    password = request.form['password']
+    # username = request.form['username']
+    # name = request.form['name']
+    # password = request.form['password']
+    username = request.json['username'] 
+    name = request.json['name']
+    password = request.json['password']
 
     if username and name and password:
         print(f"Username: {username} name: {name} password: {password}")
@@ -76,9 +80,9 @@ def deleteUser(id):
 
 @app.route('/edit/<string:id>',methods=['PUT'])
 def update_user(id):
-    username = request.form['username']
-    name = request.form['name']
-    password = request.form['password']
+    username = request.json['username']
+    name = request.json['name']
+    password = request.json['password']
 
     if username and name and password:
         cursor = db.database.cursor()
