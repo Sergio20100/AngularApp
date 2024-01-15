@@ -22,7 +22,9 @@ app = Flask(__name__)
 @app.route('/api/v1/users',methods = ['GET'])
 def get_users():
     response = {'message':'success'}
-    return jsonify(response) , 200
+    response = jsonify(response)
+    response.headers.add('Access-Control-Allow-Origin','*')
+    return  response , 200
 
 @app.route('/api/v1/users/<id>', methods = ['GET'])
 def get_userById(id):

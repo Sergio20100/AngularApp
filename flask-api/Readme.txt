@@ -1,1 +1,1 @@
-Aqui se ejecutara el Backend
+se ejcuta el archivo main.py dentro de la carpeta src
