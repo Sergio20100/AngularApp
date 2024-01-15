@@ -1,1 +1,45 @@
-<p>search-user works!</p>
+
+<div class="container">
+    <form [formGroup]="form" (submit)="enviarData()">
+        <div class="form-group">
+            <div class="Col">
+                <label>Username: </label>
+                <input type="text" class="form-control mb-3" formControlName="username">
+            </div>
+            <div class="Col">
+                <label>Name: </label>
+                <input type="text" class="form-control mb-3" formControlName="name">
+            </div>
+            <div class="Col">
+                <label>Password: </label>
+                <input type="text" class="form-control mb-3" formControlName="password">
+            </div>
+            <div class="Col">
+                <button class="btn btn-primary mb-3 mt-4" type="submit">Save</button>
+            </div>
+        </div>
+    </form>
+<!-- Tabla -->
+    <table class="table table-bordered"> 
+        <thead>
+            <th class="col">#</th>
+            <th class="col">Username</th>
+            <th class="col">Name</th>
+            <th class="col">Password</th>
+            <th class="col">Edit</th>
+            <th class="col">Delete</th>
+        </thead>
+        <tbody>
+            @for (d of users; track $index) {
+               <tr>
+                <td>{{d.id}}</td>
+                <td>{{d.username}}</td>
+                <td>{{d.name}}</td>
+                <td>{{d.password}}</td>
+                <td><button class="btn btn-primary btn-sm" id = "btn-edit{{d.id}}" data-bs-toggle="modal" >Edit</button></td>
+                            <td> <a  class="btn btn-danger btn-sm">Delete</a> </td>
+               </tr>
+            }     
+        </tbody>
+    </table>
+</div>
