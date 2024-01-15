@@ -26,8 +26,7 @@
             <th class="col">Username</th>
             <th class="col">Name</th>
             <th class="col">Password</th>
-            <th class="col">Edit</th>
-            <th class="col">Delete</th>
+            
         </thead>
         <tbody>
             @for (d of users; track $index) {
@@ -36,8 +35,8 @@
                 <td>{{d.username}}</td>
                 <td>{{d.name}}</td>
                 <td>{{d.password}}</td>
-                <td><button class="btn btn-primary btn-sm" id = "btn-edit{{d.id}}" data-bs-toggle="modal" >Edit</button></td>
-                            <td> <a  class="btn btn-danger btn-sm">Delete</a> </td>
+                <!-- <td><button class="btn btn-primary btn-sm" id = "btn-edit{{d.id}}" data-bs-toggle="modal" data-bs-target="#modal{{d.id}}" >Edit</button></td> -->
+                <td> <a href="http://127.0.0.1:5000/delete/{{d.id}}" class="btn btn-danger btn-sm" (click)="">Delete</a> </td>
                </tr>
             }     
         </tbody>

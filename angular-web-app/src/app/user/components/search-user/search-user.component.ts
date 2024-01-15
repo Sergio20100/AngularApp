@@ -45,5 +45,8 @@ export class SearchUserComponent implements OnInit{
     }).subscribe(
       respuesta =>{console.log("Comentario enviado");}
     )
+  }
+  borrarData(){
+    this.serviceUser.deleteUser()
   }  
 }
