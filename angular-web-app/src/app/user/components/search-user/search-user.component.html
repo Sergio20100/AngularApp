@@ -1,44 +1,37 @@
-
 <div class="container">
-    <form [formGroup]="form" (submit)="enviarData()">
-        <div class="form-group">
-            <div class="Col">
-                <label>Username: </label>
-                <input type="text" class="form-control mb-3" formControlName="username">
-            </div>
-            <div class="Col">
-                <label>Name: </label>
-                <input type="text" class="form-control mb-3" formControlName="name">
-            </div>
-            <div class="Col">
-                <label>Password: </label>
-                <input type="text" class="form-control mb-3" formControlName="password">
-            </div>
-            <div class="Col">
-                <button class="btn btn-primary mb-3 mt-4" type="submit">Save</button>
-            </div>
+    <div class="col">
+        <div class="col">
+            <h2> Lista de usuarios</h2>
+            <a href="/add-user" class="btn btn-primary btn-sm"> Agregar Usuario</a>
         </div>
-    </form>
-<!-- Tabla -->
-    <table class="table table-bordered"> 
+        <div class="col">
+            <form [formGroup]="form" (submit)="listByID(form.value.id)">
+                <label class="col">Buscar por ID: </label>
+                <input type="number" class="col" placeholder="Digite un id" formControlName="id">
+                <button type="submit" class="btn btn-warning" >Search</button>
+            </form>
+        </div>
+    </div>
+    <!-- Tabla -->
+    <table class="table table-bordered">
         <thead>
             <th class="col">#</th>
             <th class="col">Username</th>
             <th class="col">Name</th>
             <th class="col">Password</th>
-            
+
         </thead>
         <tbody>
             @for (d of users; track $index) {
-               <tr>
+            <tr>
                 <td>{{d.id}}</td>
                 <td>{{d.username}}</td>
                 <td>{{d.name}}</td>
                 <td>{{d.password}}</td>
-                <!-- <td><button class="btn btn-primary btn-sm" id = "btn-edit{{d.id}}" data-bs-toggle="modal" data-bs-target="#modal{{d.id}}" >Edit</button></td> -->
-                <td> <a href="http://127.0.0.1:5000/delete/{{d.id}}" class="btn btn-danger btn-sm" (click)="">Delete</a> </td>
-               </tr>
-            }     
+                <td><a class="btn btn-primary btn-sm" id = "btn-edit{{d.id}}"  [routerLink]="['/edit-user/',d.id]" >Edit</a></td>
+                <td> <a class="btn btn-danger btn-sm" (click)="borrarData(d.id)">Delete</a> </td>
+            </tr>
+            }
         </tbody>
     </table>
 </div>
