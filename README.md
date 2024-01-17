@@ -9,15 +9,15 @@ also you have to create a table named "users" on both databases, in future I wil
 ## EndPoints
 * /login
 1. Private Routes with JWT Authentication
-  * /admin-users -> GET
-  * /admin-users/:id -> GET by ID
-  * /admin-user -> POST
-  * /admin-users-delete/:id -> DELETE
-  * /admin-users-edit/:id -> PUT
+    * /admin-users -> GET
+    * /admin-users/:id -> GET by ID
+    * /admin-user -> POST
+    * /admin-users-delete/:id -> DELETE
+    * /admin-users-edit/:id -> PUT
 
 2. Public Routes
-  * /users -> GET
-  * /users/:id -> GET by ID
-  * /user -> method POST
-  * /delete/:id -> DELETE
-  * /edit/:id -> PUT
+    * /users -> GET
+    * /users/:id -> GET by ID
+    * /user -> method POST
+    * /delete/:id -> DELETE
+    * /edit/:id -> PUT
