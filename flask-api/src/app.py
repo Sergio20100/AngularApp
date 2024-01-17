@@ -6,7 +6,7 @@ import pytz
 import jwt  #de la libreria PyJWT
 # se crea la instancia de Flask
 app = Flask(__name__)
-CORS(app)
+CORS(app) 
 #Se configura una clave secreta para generar el token
 app.config['SECRET_KEY'] = 'H0L4mUNd0'
 # Logica de JSON WEB TOKEN
@@ -34,41 +34,62 @@ def verify_token(headers):
     return False
 
 
+#Ruta para iniciar sesion y adquirir el JSON Web Token
+
+@app.post('/login')
+def login():
+    username = request.json['username']
+    password = request.json['password']
+    if username=='admin' and password =='123456':
+        encode_token = generate_token(username)
+        return jsonify({'success':True,'token':encode_token})
+    else:
+        return jsonify({'success':False})
+
 #Rutas para /admin-users rutas privadas
 @app.route('/admin-users',methods=['GET'])
 def get_admin_users():
-    cursor = admin_database.cursor()
-    cursor.execute("SELECT * FROM users")
-    myResult = cursor.fetchall()
-    # Convertir datos a un diccionario 
-    insertObjet = []
-    columnNames = [column[0] for column in cursor.description ]
-    for users in myResult:
-        insertObjet.append(dict(zip(columnNames,users)))
-    cursor.close()
-    # config response
-    response = jsonify(insertObjet)
-    response.headers.add('Access-Control-Allow-Origin','*')
-    return response
-
+    if verify_token(request.headers):
+        cursor = admin_database.cursor()
+        cursor.execute("SELECT * FROM users")
+        myResult = cursor.fetchall()
+        # Convertir datos a un diccionario 
+        insertObjet = []
+        columnNames = [column[0] for column in cursor.description ]
+        for users in myResult:
+            insertObjet.append(dict(zip(columnNames,users)))
+        cursor.close()
+        # config response
+        response = jsonify(insertObjet)
+        response.headers.add('Access-Control-Allow-Origin','*')
+        return response, 200
+    else:
+        response = jsonify({'message':'Unauthorized'})
+        return response, 401
+    
 @app.route('/admin-users/<string:id>',methods=['GET'])
 def get_admin_userByID(id):
-    cursor = admin_database.cursor()
-    sql = "SELECT * FROM users WHERE id = %s"
-    data = (id,)
-    cursor.execute(sql,data)
-    myResult = cursor.fetchall()
-    # Convertir datos a un diccionario 
-    insertObjet = []
-    columnNames = [column[0] for column in cursor.description ]
-    for users in myResult:
-        insertObjet.append(dict(zip(columnNames,users)))
-    cursor.close()
-    # config response
-    response = jsonify(insertObjet)
-    response.headers.add('Access-Control-Allow-Origin','*')
-    return response
-
+    
+    if verify_token(request.headers):
+        cursor = admin_database.cursor()
+        sql = "SELECT * FROM users WHERE id = %s"
+        data = (id,)
+        cursor.execute(sql,data)
+        myResult = cursor.fetchall()
+        # Convertir datos a un diccionario 
+        insertObjet = []
+        columnNames = [ column[0] for column in cursor.description ]
+        for users in myResult:
+            insertObjet.append(dict(zip(columnNames,users)))
+        cursor.close()
+        # config response
+        response = jsonify(insertObjet)
+        response.headers.add('Access-Control-Allow-Origin','*')
+        return response
+    
+    else:
+        response = jsonify({'message':'Unauthorized'})
+        return response, 401
 
 
 @app.route('/admin-user',methods = ['POST'])
@@ -80,50 +101,70 @@ def add_admin_user():
     name = request.json['name']
     password = request.json['password']
 
-    if username and name and password:
-        print(f"Username: {username} name: {name} password: {password}")
-        cursor = admin_database.cursor()
-        sql = "INSERT INTO users (username,name,password) VALUES (%s,%s,%s)"
-        data = (username, name, password)
-        cursor.execute(sql, data)
-        admin_database.commit()
-        response = jsonify({'message':"Succes create User"})
-        response.headers.add('Access-Control-Allow-Origin','*')
-        return response,200
+    
+    if verify_token(request.headers):
+        
+        if username and name and password:
+            print(f"Username: {username} name: {name} password: {password}")
+            cursor = admin_database.cursor()
+            sql = "INSERT INTO users (username,name,password) VALUES (%s,%s,%s)"
+            data = (username, name, password)
+            cursor.execute(sql, data)
+            admin_database.commit()
+            response = jsonify({'message':"Succes create User"})
+            response.headers.add('Access-Control-Allow-Origin','*')
+            return response,200
+        else:
+            response = jsonify({'message':"Missing data for create User"})
+            response.headers.add('Access-Control-Allow-Origin','*')
+            return response,400
+
+        
+        
+        
+        
+        
     else:
-        response = jsonify({'message':"Missing data for create User"})
-        response.headers.add('Access-Control-Allow-Origin','*')
-        return response,400
+        response = jsonify({'message':'Unauthorized'})
+        return response, 401
+
+    
 
 @app.delete('/admin-users-delete/<string:id>')
 def delete_admin_user(id):
-    cursor = admin_database.cursor()
-    sql = "DELETE FROM users WHERE id=%s"
-    data = (id,)
-    cursor.execute(sql,data)
-    admin_database.commit()
-    # preparar respuesta
-    response = jsonify({'message':'User delete succesfully'})
-    response.headers.add('Access-Control-Allow-Origin','*')
-    return response
-
-@app.route('/admin-users-edit/<string:id>',methods=['PUT'])
-def update_admin_user(id):
-    username = request.json['username']
-    name = request.json['name']
-    password = request.json['password']
-
-    if username and name and password:
+    if verify_token(request.headers):
         cursor = admin_database.cursor()
-        sql = "UPDATE users SET username = %s, name = %s, password = %s WHERE id = %s"
-        data = (username, name, password,id)
+        sql = "DELETE FROM users WHERE id=%s"
+        data = (id,)
         cursor.execute(sql,data)
         admin_database.commit()
+        # preparar respuesta
+        response = jsonify({'message':'User delete succesfully'})
+        response.headers.add('Access-Control-Allow-Origin','*')
+        return response
+    else:
+        response = jsonify({'message':'Unauthorized'})
+        return response, 401
+@app.route('/admin-users-edit/<string:id>',methods=['PUT'])
+def update_admin_user(id):
+    if verify_token(request.headers):
+        username = request.json['username']
+        name = request.json['name']
+        password = request.json['password']
 
-    response = jsonify({'message':'User Update succesfully'})
-    response.headers.add('Access-Control-Allow-Origin','*')
-    return response
+        if username and name and password:
+            cursor = admin_database.cursor()
+            sql = "UPDATE users SET username = %s, name = %s, password = %s WHERE id = %s"
+            data = (username, name, password,id)
+            cursor.execute(sql,data)
+            admin_database.commit()
 
+        response = jsonify({'message':'User Update succesfully'})
+        response.headers.add('Access-Control-Allow-Origin','*')
+        return response
+    else:
+        response = jsonify({'message':'Unauthorized'})
+        return response, 401
 
 #Rutas para /users
 @app.route('/users',methods=['GET'])
