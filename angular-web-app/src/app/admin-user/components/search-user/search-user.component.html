@@ -1,14 +1,15 @@
 <div class="container">
     <div class="col">
         <div class="col">
-            <h2> Lista de usuarios</h2>
-            <a href="/login" class="btn btn-secondary btn-sm">Iniciar sesion como admin</a>
-            <a href="/add-user" class="btn btn-primary btn-sm"> Agregar Usuario</a>
+            <h2> Users's List </h2>
+            <h4>logged as admin</h4>
+            <a href="/add-user" class="btn btn-primary btn-sm"> Add admin user</a>
+            <a href="/home" class="btn btn-primary btn-sm"> Back Home</a>
         </div>
         <div class="col">
             <form [formGroup]="form" (submit)="listByID(form.value.id)">
-                <label class="col">Buscar por ID: </label>
-                <input type="number" class="col" placeholder="Digite un id" formControlName="id">
+                <label class="col">Search by ID: </label>
+                <input type="number" class="col" placeholder="admin ID" formControlName="id">
                 <button type="submit" class="btn btn-warning" >Search</button>
             </form>
         </div>

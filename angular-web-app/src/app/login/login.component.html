@@ -1,0 +1,19 @@
+<div class="container extra_container">
+    <h2>Login with JWT</h2>
+    <form [formGroup]="angForm"  autocomplete="off" (submit)="postdata()">
+        <div class="form-group">
+            <div class="Col">
+                <label>Username: </label>
+                <input required type="email" class="form-control mb-3" formControlName="username">
+            </div>
+            <div class="Col">
+                <label>Password: </label>
+                <input required type="password" class="form-control mb-3" formControlName="password">
+            </div>
+            <div class="Col">
+                <button class="btn btn-primary mb-3 mt-4"  type="submit">Save</button>
+            </div>
+        </div>
+    </form>
+    <a class="btn btn-primary mb-3 mt-4" href="/home">BACK HOME</a>
+</div>

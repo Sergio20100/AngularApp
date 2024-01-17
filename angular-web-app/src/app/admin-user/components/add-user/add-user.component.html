@@ -1,0 +1,21 @@
+<div class="container extra_container">
+    <form [formGroup]="angForm"  autocomplete="off" (submit)="postdata(angForm)">
+        <div class="form-group">
+            <div class="Col">
+                <label>Username: </label>
+                <input required type="email" class="form-control mb-3" formControlName="username">
+            </div>
+            <div class="Col">
+                <label>Name: </label>
+                <input required type="text" class="form-control mb-3" formControlName="name">
+            </div>
+            <div class="Col">
+                <label>Password: </label>
+                <input required type="text" class="form-control mb-3" formControlName="password">
+            </div>
+            <div class="Col">
+                <button class="btn btn-primary mb-3 mt-4"  type="submit">Save</button>
+            </div>
+        </div>
+    </form>
+</div>
