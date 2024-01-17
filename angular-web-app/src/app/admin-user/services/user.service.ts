@@ -1,19 +1,29 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core"
 import { Observable, catchError, of } from "rxjs";
 import { User } from "../interfaces/user.interface";
 import { ActivatedRoute } from "@angular/router";
+import { CookieService } from "ngx-cookie-service";
 
 @Injectable({
     providedIn:'root'
 })
 export class UserService{
-    constructor(private http: HttpClient,private activeRoute: ActivatedRoute){ }
-
+    headersRequest:HttpHeaders
+    constructor(private http: HttpClient,private activeRoute: ActivatedRoute, private cookiesService:CookieService){ 
+        
+        this.headersRequest = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.cookiesService.get('token')}`
+          })
+    }
+    
     // url:string = "http://127.0.0.1:5000/api/v1/users";
     url:string = 'http://127.0.0.1:5000';
     getUsers(): Observable<User[] | undefined>{
-        return this.http.get<User[] >(this.url+'/admin-users').pipe(
+        return this.http.get<User[] >(this.url+'/admin-users',{
+            headers:this.headersRequest
+        }).pipe(
             catchError ((err)=>{
                 console.log(err)
                 return of(undefined)
@@ -22,7 +32,9 @@ export class UserService{
     }
 
     getUserByID(id:string): Observable<User[] | undefined>{
-        return this.http.get<User[] >(this.url+'/admin-users/'+id).pipe(
+        return this.http.get<User[] >(this.url+'/admin-users/'+id,{
+            headers:this.headersRequest
+        }).pipe(
             catchError ((err)=>{
                 console.log(err)
                 return of(undefined)
@@ -30,7 +42,9 @@ export class UserService{
         )
     }
     addUser(body:User): Observable<User | undefined>{
-        return this.http.post<User>(this.url+'/admin-user',body).pipe(
+        return this.http.post<User>(this.url+'/admin-user',body,{
+            headers:this.headersRequest
+        }).pipe(
 
             catchError((err)=>{
                 console.log(err)
@@ -39,11 +53,15 @@ export class UserService{
         )
     }
     deleteUser(id:string):Observable<any | undefined>{
-        return this.http.delete(this.url+'/admin-users-delete/'+id)
+        return this.http.delete(this.url+'/admin-users-delete/'+id,{
+            headers:this.headersRequest
+        })
     }
     
     updateUser(body:User,id:string): Observable<User | undefined>{
-        return this.http.put<User>(this.url+'/admin-users-edit/'+id,body).pipe(
+        return this.http.put<User>(this.url+'/admin-users-edit/'+id,body,{
+            headers:this.headersRequest
+        }).pipe(
 
             catchError((err)=>{
                 console.log(err)

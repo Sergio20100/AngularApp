@@ -55,7 +55,7 @@ export class EditUserComponent implements OnInit {
         password: form.value.password,
         username: form.value.username
       },this.id).pipe(first()).subscribe(data=>{
-        this.route.navigate(['home'])
+        this.route.navigate(['admin-home'])
       })
     }
    }

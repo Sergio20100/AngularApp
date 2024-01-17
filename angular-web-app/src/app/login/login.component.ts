@@ -3,6 +3,7 @@ import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { LoginService } from './login.service';
+import { CookieService } from 'ngx-cookie-service';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -13,8 +14,7 @@ import { LoginService } from './login.service';
 export class LoginComponent {
   angForm: FormGroup;
   response: any ={success:''}
-  auth_token:string = ''
-  constructor(private formBuilder: FormBuilder, private route: Router, private serviceLogin: LoginService) {
+  constructor(private formBuilder: FormBuilder, private cookieService:CookieService,  private route: Router, private serviceLogin: LoginService) {
     this.angForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
@@ -29,7 +29,7 @@ export class LoginComponent {
         console.log(response)
         this.response = response
         if(this.response.token){
-          this.auth_token = this.response.token
+          this.cookieService.set('token',this.response.token) // se agrega la cookie
           this.route.navigate(['admin-home'])
         }else{
           console.log(this.response.success)

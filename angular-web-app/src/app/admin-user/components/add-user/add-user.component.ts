@@ -27,7 +27,7 @@ export class AddUserComponent {
         password: this.angForm.value.password,
         username: this.angForm.value.username
       }).pipe(first()).subscribe(data=>{
-        this.route.navigate(['home'])
+        this.route.navigate(['admin-home'])
       })
     }
   }
