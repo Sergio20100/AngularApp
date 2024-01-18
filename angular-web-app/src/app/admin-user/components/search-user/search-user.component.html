@@ -4,7 +4,7 @@
             <h2> Users's List </h2>
             <h4>logged as admin</h4>
             <a href="/add-admin-user" class="btn btn-primary btn-sm"> Add admin user</a>
-            <a href="/home" class="btn btn-primary btn-sm"> Back Home</a>
+            <a (click)="clearCookies()" class="btn btn-primary btn-sm"> Back Home</a>
         </div>
         <div class="col">
             <form [formGroup]="form" (submit)="listByID(form.value.id)">

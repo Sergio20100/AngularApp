@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { SearchUserComponent } from '../../components/search-user/search-user.component';
 
 @Component({
-  selector: 'app-user-page',
+  selector: 'app-admin-user-page',
   standalone: true,
   imports: [SearchUserComponent],
   templateUrl: './user-page.component.html',

@@ -20,7 +20,7 @@ export class AddUserComponent {
         username:['',Validators.required]
       })
     }
-    postdata(form:any){
+    postdata(){
       console.log(this.angForm.value)
       this.serviceUser.addUser({
         name: this.angForm.value.name,

@@ -4,6 +4,7 @@ import { User } from '../../interfaces/user.interface';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { first } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 
 @Component({
@@ -15,7 +16,7 @@ import { first } from 'rxjs';
 })
 export class SearchUserComponent implements OnInit{
   
-  constructor(private router:Router ,private serviceUser: UserService, private formBuilder:FormBuilder){
+  constructor(private cookiesService:CookieService,private router:Router ,private serviceUser: UserService, private formBuilder:FormBuilder){
     this.form = this.formBuilder.group({
       id:['',Validators.required]
     })
@@ -27,6 +28,17 @@ export class SearchUserComponent implements OnInit{
     this.listarData();
     
   }
+
+
+  
+  clearCookies(){
+    if(this.cookiesService.check('token')){
+        this.cookiesService.delete('token')
+        this.router.navigate(['home'])
+    }
+  }
+
+
   listarData(){
     this.serviceUser.getUsers().subscribe(
       {
